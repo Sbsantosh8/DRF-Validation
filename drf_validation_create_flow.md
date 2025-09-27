@@ -135,3 +135,26 @@ class EmployeeAPIView(APIView):
 4. Mini project → Employee CRUD with all layers
 5. Review flow: **Model → Serializer → View → DB**
 
+[API Request] 
+     ↓
+[View] 
+     ↓
+[Serializer.is_valid()]
+     ↓
+ ┌───────────────┐
+ │ validate_<field> │
+ │ validate()       │
+ └───────────────┘
+     ↓
+[Serializer.save()]
+     ↓
+ ┌───────────────┐
+ │ create()       │
+ │ update()       │
+ └───────────────┘
+     ↓
+[Model.save()]
+     ↓
+[Database ✅]
+
+
