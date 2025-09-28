@@ -1,6 +1,6 @@
-# Django Rest Framework: `read_only` vs `write_only`
+# Django Rest Framework: `read_only` vs `write_only` & Django ORM `get_or_create`
 
-A concise and easy-to-understand note for DRF serializer fields.
+A concise and easy-to-understand note for DRF serializer fields and Django ORM `get_or_create` method.
 
 ---
 
@@ -92,4 +92,55 @@ class UserSerializer(serializers.ModelSerializer):
 
 ---
 
-This note can be directly used as reference while creating DRF serializers.
+## 3. Django ORM `get_or_create`
+
+* **Purpose:** Either **fetch an existing object** or **create a new one** if it doesn’t exist.
+* **Usage:**
+
+```python
+obj, created = Model.objects.get_or_create(
+    defaults=None,
+    **lookup_fields
+)
+```
+
+* **Parameters:**
+
+  * `**lookup_fields` → Fields used to check if object exists.
+  * `defaults` → Dict of values used to create the object if it doesn’t exist.
+* **Returns:** Tuple `(obj, created)`
+
+  * `obj` → Retrieved or newly created object.
+  * `created` → `True` if created, `False` if fetched.
+
+**Example 1: Simple usage**
+
+```python
+employee, created = Employee.objects.get_or_create(
+    email="john@example.com",
+    defaults={
+        "first_name": "John",
+        "last_name": "Doe",
+        "job_title": "Developer",
+    }
+)
+
+if created:
+    print("New employee created")
+else:
+    print("Employee already exists")
+```
+
+**Example 2: Without `defaults`**
+
+```python
+category, created = Category.objects.get_or_create(name="Technology")
+```
+
+* Creates only with the `name` field if required fields allow it.
+
+**Notes:**
+
+* Always provide `defaults` for required fields not in the lookup.
+* Wrapped in a **transaction** → safe from race conditions.
+* Use `update_or_create()` if you want to **update fields if object exists**.
