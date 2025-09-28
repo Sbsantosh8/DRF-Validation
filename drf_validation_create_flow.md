@@ -135,26 +135,34 @@ class EmployeeAPIView(APIView):
 4. Mini project → Employee CRUD with all layers
 5. Review flow: **Model → Serializer → View → DB**
 
-[API Request] 
+# DRF Create/Update Flow with Parameters
+
+```text
+[API Request] (JSON body)
      ↓
 [View] 
+  - passes request.data to serializer
      ↓
 [Serializer.is_valid()]
+  - Input: request.data
+  - Output: validated_data (if valid)
      ↓
- ┌───────────────┐
- │ validate_<field> │
- │ validate()       │
- └───────────────┘
+ ┌───────────────────────┐
+ │ validate_<field>(value) │
+ │ validate(attrs)         │
+ └───────────────────────┘
      ↓
 [Serializer.save()]
+  - Input: validated_data
+  - Decides → create() or update()
      ↓
- ┌───────────────┐
- │ create()       │
- │ update()       │
- └───────────────┘
+ ┌───────────────────┐
+ │ create(validated_data) │
+ │ update(instance, validated_data) │
+ └───────────────────┘
      ↓
 [Model.save()]
+  - Input: model instance (with fields set)
+  - Commits data → DB
      ↓
 [Database ✅]
-
-
